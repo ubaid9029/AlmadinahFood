@@ -5,10 +5,12 @@ import 'package:food_home/json.dart';
 import 'package:slimy_card/slimy_card.dart';
 import 'Add to cart.dart';
 import 'fav8.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class CardDetails extends StatefulWidget {
-  final image, name, price, desc, listGet;
-  CardDetails(this.image, this.name, this.price, this.desc, this.listGet);
+  final image, name, price, desc, listGet, index;
+  CardDetails(
+      this.image, this.name, this.price, this.desc, this.listGet, this.index);
   @override
   _CardDetailsState createState() => _CardDetailsState();
 }
@@ -24,7 +26,7 @@ class _CardDetailsState extends State<CardDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         shadowColor: redTheme,
@@ -49,7 +51,7 @@ class _CardDetailsState extends State<CardDetails> {
                   MaterialPageRoute(
                       builder: (context) => AddToCart(widget.listGet)),
                 );
-                // print(selectedItem);
+                print(selectedItem);
               },
               icon: Icon(
                 Icons.shopping_cart,
@@ -134,31 +136,40 @@ class _CardDetailsState extends State<CardDetails> {
   }
 
   Widget topCardWidget(String imagePath, var width, var height) {
+    var size = MediaQuery.of(context).size;
+    // List index = [[], [], []];
+    List<dynamic> ubaid = items[0]['FROZEN'][widget.index][3];
+    print(widget.listGet);
     return Container(
       height: height,
       width: width,
-      // child: CarouselSlider(
-      //     items: items,
-      //     options: CarouselOptions(
-      //       height: 400,
-      //       aspectRatio: 16 / 9,
-      //       viewportFraction: 0.8,
-      //       initialPage: 0,
-      //       enableInfiniteScroll: true,
-      //       reverse: false,
-      //       autoPlay: true,
-      //       autoPlayInterval: Duration(seconds: 3),
-      //       autoPlayAnimationDuration: Duration(milliseconds: 800),
-      //       autoPlayCurve: Curves.fastOutSlowIn,
-      //       enlargeCenterPage: true,
-      //       // onPageChanged: callbackFunction,
-      //       scrollDirection: Axis.horizontal,
-      //     )),
+      child: CarouselSlider(
+          options: CarouselOptions(
+            height: size.height / 3,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            // autoPlayInterval: Duration(milliseconds:800),
+          ),
+          items: ubaid.map((i) {
+            return Builder(builder: (BuildContext context) {
+              return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 2),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    image: DecorationImage(
+                        image: AssetImage(
+                          i,
+                        ),
+                        fit: BoxFit.cover),
+                  ));
+            });
+          }).toList()),
       decoration: BoxDecoration(
         gradient: redT,
         borderRadius: BorderRadius.circular(15),
 
-        image: DecorationImage(fit: BoxFit.cover, image: AssetImage(imagePath)),
+        // image: DecorationImage(fit: BoxFit.cover, image: AssetImage(imagePath)),
         //
       ),
     );
@@ -247,11 +258,10 @@ class _CardDetailsState extends State<CardDetails> {
                       selectedItem[0].add(widget.image);
                       selectedItem[1].add(widget.name);
                       selectedItem[2].add(widget.price);
-                      if (selectedItem[0] != null) {
-                        widget.listGet[0] = widget.listGet[0] + selectedItem[0];
-                        widget.listGet[1] = widget.listGet[1] + selectedItem[1];
-                        widget.listGet[2] = widget.listGet[2] + selectedItem[2];
-                      }
+
+                      widget.listGet[0] = widget.listGet[0] + selectedItem[0];
+                      widget.listGet[1] = widget.listGet[1] + selectedItem[1];
+                      widget.listGet[2] = widget.listGet[2] + selectedItem[2];
                     });
                   },
                   color: Color(0xffA02621),

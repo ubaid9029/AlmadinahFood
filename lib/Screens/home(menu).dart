@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List listGet = [[], [], []];
-
+  List myKeys = ["ALL"];
   Widget textfield() {
     return TextField(
       cursorColor: redTheme,
@@ -36,6 +36,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < items.length; i++) {
+      var keys = items[i].keys;
+      myKeys.add(keys.elementAt(0));
+      print(myKeys);
+    }
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -117,6 +122,18 @@ class _HomeState extends State<Home> {
                 margin: EdgeInsets.only(left: 30, right: 30, top: 10),
                 child: textfield(),
               ),
+              Container(
+                height: 30.0,
+                child: ListView.builder(
+                    itemCount: myKeys.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      // ignore: deprecated_member_use
+                      return FlatButton(
+                          onPressed: () {}, child: Text('${myKeys[index]}'));
+                    }),
+              ),
               CONTAINER(
                 margin: EdgeInsets.only(top: 10),
                 width: size.width * 0.98,
@@ -129,108 +146,98 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(50.0),
                 ),
-                child: SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      // ListView.builder(
-                      //     itemCount: 5,
-                      //     scrollDirection: Axis.horizontal,
-                      //     shrinkWrap: true,
-                      //     itemBuilder: (context, index) {
-                      //       return Text('ALL');
-                      //     }),
-                      GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: items[0]["FROZEN"].length,
-                        padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 15,
-                            childAspectRatio: 0.8),
-                        itemBuilder: (BuildContext context, index) {
-                          return InkWell(
-                            onTap: () async {
-                              var image = items[0]['FROZEN'][index][3][0];
-                              var price = items[0]['FROZEN'][index][1];
-                              var name = items[0]['FROZEN'][index][0];
-                              var desc = items[0]['FROZEN'][index][2];
+                child: Stack(
+                  children: [
+                    GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: items[0]["FROZEN"].length,
+                      padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 15,
+                          childAspectRatio: 0.8),
+                      itemBuilder: (BuildContext context, index) {
+                        return InkWell(
+                          onTap: () async {
+                            var image = items[0]['FROZEN'][index][3][0];
+                            var price = items[0]['FROZEN'][index][1];
+                            var name = items[0]['FROZEN'][index][0];
+                            var desc = items[0]['FROZEN'][index][2];
 
-                              var getList = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CardDetails(
-                                          image, name, price, desc, listGet)));
-                              listGet[0] = listGet[0] + getList[0];
-                              listGet[1] = listGet[1] + getList[1];
-                              listGet[2] = listGet[2] + getList[2];
+                            var getList = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CardDetails(image,
+                                        name, price, desc, listGet, index)));
+                            listGet[0] = listGet[0] + getList[0];
+                            listGet[1] = listGet[1] + getList[1];
+                            listGet[2] = listGet[2] + getList[2];
 
-                              print(getList);
-                              print(listGet);
-                            },
-                            child: Stack(
-                              children: [
-                                CONTAINER(
-                                  width: 175,
-                                  height: 130,
-                                  color: Colors.black,
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "${items[0]['FROZEN'][index][3][0]}"),
-                                      fit: BoxFit.cover),
-                                  border:
-                                      Border.all(color: Colors.red, width: 1),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                  ),
+                            print(getList);
+                            print(listGet);
+                          },
+                          child: Stack(
+                            children: [
+                              CONTAINER(
+                                width: 175,
+                                height: 130,
+                                color: Colors.black,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "${items[0]['FROZEN'][index][3][0]}"),
+                                    fit: BoxFit.cover),
+                                border: Border.all(color: Colors.red, width: 1),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
                                 ),
-                                Positioned(
-                                  top: 130,
-                                  child: CONTAINER(
-                                    padding: EdgeInsets.only(left: 10, top: 10),
-                                    width: 175,
-                                    height: 89,
-                                    color: Colors.white,
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(30),
-                                      bottomRight: Radius.circular(30),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${items[0]['FROZEN'][index][0]}",
+                              ),
+                              Positioned(
+                                top: 130,
+                                child: CONTAINER(
+                                  padding: EdgeInsets.only(left: 10, top: 10),
+                                  width: 175,
+                                  height: 89,
+                                  color: Colors.white,
+                                  border:
+                                      Border.all(color: Colors.red, width: 2),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(30),
+                                    bottomRight: Radius.circular(30),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${items[0]['FROZEN'][index][0]}",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          "Price: ${items[0]['FROZEN'][index][1]}",
                                           style: TextStyle(
-                                              fontSize: 14.0,
+                                              fontSize: 16.0,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w900),
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 5),
-                                          child: Text(
-                                            "Price: ${items[0]['FROZEN'][index][1]}",
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w900),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ],
