@@ -56,7 +56,7 @@ List<dynamic> items = [
         ["images/karelac.jpg"]
       ],
       [
-        'BEEF FROZEN KARELA(12 Pcs)',
+        'BEEF FROZEN KARELA (12 Pcs)',
         1000,
         'Lorem ipsum fjdskanfnfanfdjadsfnj ajdjfasklfsd jd fjafkdjadsnfk asdkjfnkaf asd fknsdkfnskanajd safnsdjaknfs ',
         ["images/keemakar.jpg"]

@@ -75,16 +75,18 @@ class _CardDetailsState extends State<CardDetails> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SlimyCard(
-              color: redTheme,
-              width: size.width,
-              topCardHeight: size.height * 0.35,
-              bottomCardHeight: 250,
-              borderRadius: 15,
-              topCardWidget: topCardWidget(
-                  "${widget.image}", size.width, size.height * 0.4),
-              bottomCardWidget: bottomCardWidget(),
-              slimeEnabled: true,
+            Container(
+              child: SlimyCard(
+                color: redTheme,
+                width: size.width,
+                topCardHeight: size.height * 0.35,
+                bottomCardHeight: 250,
+                borderRadius: 15,
+                topCardWidget: topCardWidget(
+                    "${widget.image}", size.width, size.height * 0.4),
+                bottomCardWidget: bottomCardWidget(),
+                slimeEnabled: true,
+              ),
             ),
             SizedBox(
               height: 20,
@@ -166,7 +168,7 @@ class _CardDetailsState extends State<CardDetails> {
             });
           }).toList()),
       decoration: BoxDecoration(
-        gradient: redT,
+        color: redTheme,
         borderRadius: BorderRadius.circular(15),
 
         // image: DecorationImage(fit: BoxFit.cover, image: AssetImage(imagePath)),

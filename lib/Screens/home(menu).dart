@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List listGet = [[], [], []];
-  List myKeys = ["ALL"];
+  var ctrgy = "FROZEN", ctrgyIndex;
   Widget textfield() {
     return TextField(
       cursorColor: redTheme,
@@ -36,14 +36,17 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    List myKeys = ["ALL"];
+
     for (int i = 0; i < items.length; i++) {
       var keys = items[i].keys;
       myKeys.add(keys.elementAt(0));
-      print(myKeys);
+      // print(myKeys);
     }
-    final size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
+        // backgroundColor: redTheme,
         appBar: AppBar(
           shadowColor: redTheme,
           backgroundColor: Colors.transparent,
@@ -78,170 +81,205 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        bottomNavigationBar: CurvedNavigationBar(
-          color: redTheme,
-          height: 50.0,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: redTheme,
-          items: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
-              },
-              icon: Icon(
-                Icons.home,
-                size: 20,
-                color: Colors.white,
+        bottomNavigationBar: ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+          child: Expanded(
+            child: Container(
+              // height: 50.0,
+              decoration: BoxDecoration(
+                gradient: redT,
+              ),
+              child: BottomNavigationBar(
+                currentIndex: 0,
+                backgroundColor: Colors.transparent,
+                iconSize: 35,
+                selectedFontSize: 18.0,
+                selectedLabelStyle: TextStyle(
+                  color: yela1,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  color: Colors.white,
+                ),
+                unselectedFontSize: 15.0,
+                selectedIconTheme: IconThemeData(color: yela1),
+                unselectedIconTheme: IconThemeData(color: Colors.white),
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    // ignore: deprecated_member_use
+                    title: Text(
+                      "Home",
+                      style: TextStyle(color: yelo2),
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.favorite),
+                    // ignore: deprecated_member_use
+                    title: Text(
+                      "Favorite",
+                      // style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FavoriteScreen(listGet)),
-                );
-              },
-              icon: Icon(
-                Icons.favorite,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
-          ],
+          ),
         ),
         drawer: Drawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                color: Colors.white,
-                alignment: Alignment.center,
-                height: 50,
-                margin: EdgeInsets.only(left: 30, right: 30, top: 10),
-                child: textfield(),
-              ),
-              Container(
-                height: 30.0,
-                child: ListView.builder(
-                    itemCount: myKeys.length,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      // ignore: deprecated_member_use
-                      return FlatButton(
-                          onPressed: () {}, child: Text('${myKeys[index]}'));
-                    }),
-              ),
-              CONTAINER(
-                margin: EdgeInsets.only(top: 10),
-                width: size.width * 0.98,
-                height: size.height * 0.72,
-                color: Colors.white,
-                border: Border.all(
-                  color: redTheme,
-                  width: 3,
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                ),
-                child: Stack(
-                  children: [
-                    GridView.builder(
-                      scrollDirection: Axis.vertical,
+        body: Column(
+          children: <Widget>[
+            /***************************UPPER COONTAINER *********/
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    color: Colors.white,
+                    alignment: Alignment.center,
+                    height: 50,
+                    margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+                    child: textfield(),
+                  ),
+                  SizedBox(
+                    height: 4.0,
+                  ),
+                  // Divider(
+                  //   color: redTheme,
+                  // ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      left: 30,
+                      right: 35,
+                    ),
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(20),
+                        // color: Colors.pink,
+                      ),
+                    ),
+                    child: ListView.builder(
+                      itemCount: myKeys.length,
+                      scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: items[0]["FROZEN"].length,
-                      padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 20,
-                          crossAxisSpacing: 15,
-                          childAspectRatio: 0.8),
-                      itemBuilder: (BuildContext context, index) {
-                        return InkWell(
-                          onTap: () async {
-                            var image = items[0]['FROZEN'][index][3][0];
-                            var price = items[0]['FROZEN'][index][1];
-                            var name = items[0]['FROZEN'][index][0];
-                            var desc = items[0]['FROZEN'][index][2];
-
-                            var getList = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CardDetails(image,
-                                        name, price, desc, listGet, index)));
-                            listGet[0] = listGet[0] + getList[0];
-                            listGet[1] = listGet[1] + getList[1];
-                            listGet[2] = listGet[2] + getList[2];
-
-                            print(getList);
-                            print(listGet);
+                      itemBuilder: (context, index) {
+                        // ignore: deprecated_member_use
+                        return FlatButton(
+                          // hoverColor: Colors.orange,
+                          onPressed: () {
+                            ctrgyIndex = index;
+                            ctrgy = myKeys[index];
+                            print(ctrgy);
                           },
-                          child: Stack(
-                            children: [
-                              CONTAINER(
-                                width: 175,
-                                height: 130,
-                                color: Colors.black,
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "${items[0]['FROZEN'][index][3][0]}"),
-                                    fit: BoxFit.cover),
-                                border: Border.all(color: Colors.red, width: 1),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              Positioned(
-                                top: 130,
-                                child: CONTAINER(
-                                  padding: EdgeInsets.only(left: 10, top: 10),
-                                  width: 175,
-                                  height: 89,
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.red, width: 2),
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(30),
-                                    bottomRight: Radius.circular(30),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${items[0]['FROZEN'][index][0]}",
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w900),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "Price: ${items[0]['FROZEN'][index][1]}",
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w900),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            '${myKeys[index]}',
+                            style: TextStyle(
+                              color: redTheme,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         );
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Divider(color: redTheme),
+            /****************************Items GRID CONTAINER****************/
+            Expanded(
+              child: GridView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: items[0][ctrgy].length,
+                padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 15,
+                    childAspectRatio: 0.8),
+                itemBuilder: (BuildContext context, index) {
+                  return InkWell(
+                    onTap: () async {
+                      var image = items[0][ctrgy][index][3][0];
+                      var price = items[0][ctrgy][index][1];
+                      var name = items[0][ctrgy][index][0];
+                      var desc = items[0][ctrgy][index][2];
+
+                      var getList = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CardDetails(
+                                  image, name, price, desc, listGet, index)));
+                      listGet[0] = listGet[0] + getList[0];
+                      listGet[1] = listGet[1] + getList[1];
+                      listGet[2] = listGet[2] + getList[2];
+
+                      print(getList);
+                      print(listGet);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 175,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            gradient: redT,
+                            // color: Colors.black,
+                            image: DecorationImage(
+                                image: AssetImage(
+                                    "${items[0][ctrgy][index][3][0]}"),
+                                fit: BoxFit.cover),
+                            border: Border.all(color: redTheme, width: 2),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10, top: 10),
+                          width: 175,
+                          height: 89,
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: redTheme, width: 1),
+                            // color: Colors.white,
+                            gradient: redT,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${items[0][ctrgy][index][0]}",
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: yelo2,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(
+                                  "Price: ${items[0][ctrgy][index][1]}",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: yelo2,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
